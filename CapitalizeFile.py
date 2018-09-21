@@ -8,15 +8,12 @@ def main():
     outputFileName = sys.argv[2]
     print ('Capitalizing', inputFileName)
 
-    fileToRead = open(inputFileName, 'r')
-    fileToWrite = open(outputFileName, 'w')
-    
-    for l in fileToRead:
-        fileToWrite.write(l.upper())
-    
-    print ('Output written to', outputFileName)
-    fileToWrite.close()
-    fileToRead.close()
+    with open(inputFileName, 'r') as fileToRead:
+        with open(outputFileName, 'w') as fileToWrite:
+            for l in fileToRead:
+                fileToWrite.write(l.upper())
+            
+            print ('Output written to', outputFileName)
 
 if __name__ == "__main__": 
     main()
