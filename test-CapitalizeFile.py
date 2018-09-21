@@ -1,6 +1,8 @@
 import CapitalizeFile
 import os
+import sys
 import unittest
+from unittest.mock import patch
 
 class TestCapitalization(unittest.TestCase):
     def testUnitTestAssert(self):
@@ -14,6 +16,11 @@ class TestCapitalization(unittest.TestCase):
             self.assertEqual(outputFile.read(), 'HELLO WORLD!')
         os.remove('.inputFile')
         os.remove('.outputFile')
+    
+    def testCallCapitalizeFileWithBadArguments(self):
+        with patch.object(sys, 'argv', ["CapitalizeFile.py", "InputFile"]):
+            with self.assertRaises(RuntimeError):
+                CapitalizeFile.main()
 
 if __name__ == '__main__':
     unittest.main()
