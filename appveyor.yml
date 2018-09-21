@@ -6,3 +6,6 @@ build: off
 
 test_script:
   - "%PYTHON%\\python.exe test-CapitalizeFile.py"
+
+artifacts:
+  - path: CapitalizeFile.py
