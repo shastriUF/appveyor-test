@@ -10,9 +10,7 @@ def main():
 
     with open(inputFileName, 'r') as fileToRead:
         with open(outputFileName, 'w') as fileToWrite:
-            for l in fileToRead:
-                fileToWrite.write(l.upper())
-            
+            fileToWrite.write(fileToRead.read().upper())            
             print ('Output written to', outputFileName)
 
 if __name__ == "__main__": 
