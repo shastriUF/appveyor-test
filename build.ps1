@@ -34,11 +34,13 @@ if ($install_NIPM)
 $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
 Assert-FileExists($nipm)
 
-$install_nxg = $false
+$install_nxg = $true
 if ($install_nxg)
 {
     Write-Output "Installing LabVIEW NXG..."
-    Start-Process -FilePath $nipm -ArgumentList "install ni-labview-nxg-2.0.0 ni-certificates --progress-only --accept-eulas --prevent-reboot" -Wait
+    Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 --temp-feeds="http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released,http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released" --progress-only --accept-eulas --prevent-reboot'
+    $id = (Get-Process 'NIPackageManager').Id
+    Wait-Process -Id $id
     Write-Output "...done"
     $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
     Assert-FileExists($nxg)
