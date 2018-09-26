@@ -4,15 +4,19 @@ Write-Output "Current directory $rootDirectory"
 
 $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.0.2.exe'
 $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
-Invoke-WebRequest -Uri $nipmDownloadPath -OutFile $nipmInstaller -Verbose
 
+Write-Output "Downloading NIPM from $nipmDownloadPath..."
+$webClient = New-Object System.Net.WebClient
+$webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
+Write-Output "...done"
 if (![System.IO.File]::Exists($nipmInstaller))
 {
     throw "Could not find downloaded NIPM installer"
 }
 
+Write-Output "Installing NIPM..."
 Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
-Write-Output "NIPM Installed..."
+Write-Output "...done"
 
 Remove-Item $nipmInstaller
 
