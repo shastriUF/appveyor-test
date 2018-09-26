@@ -12,18 +12,18 @@ if (![System.IO.File]::Exists($nipmInstaller))
 }
 
 Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
-Write-Output "NIPM Installed (maybe)"
+Write-Output "NIPM Installed..."
 
 Remove-Item $nipmInstaller
 
 $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
 if (![System.IO.File]::Exists($nipm))
 {
-    throw "Could not find installed NIPM app"
+    throw "Could not find installed NIPM at $nipm"
 }
 else 
 {
-    Write-Output "Found NIPM"
+    Write-Output "Found NIPM at $nipm"
 }
 
 return
