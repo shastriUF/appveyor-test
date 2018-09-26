@@ -2,7 +2,8 @@ environment:
   matrix:
     - PYTHON: "C:\\Python37-x64"
 
-build: off
+build:
+    - "build.ps1"
 
 test_script:
   - "%PYTHON%\\python.exe test-CapitalizeFile.py"
