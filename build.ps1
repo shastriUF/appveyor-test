@@ -16,7 +16,8 @@ Write-Output "Current directory $rootDirectory"
 $install_NIPM = $true
 if ($install_NIPM)
 {
-    $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.0.2.exe'
+    # $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.0.2.exe'
+    $nipmDownloadPath = 'www.ni.com/download/package-manager-18.0/7809/en/'
     $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
     Write-Output "Downloading NIPM from $nipmDownloadPath..."
     $webClient = New-Object System.Net.WebClient
