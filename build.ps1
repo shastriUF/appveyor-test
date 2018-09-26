@@ -1,3 +1,15 @@
+function Assert-FileExists {
+    Param ([string]$path)
+    if (![System.IO.File]::Exists($path))
+    {
+        throw "Could not find file at $path"
+    }
+    else 
+    {
+        Write-Output "Found file at $path"
+    }
+}
+
 $rootDirectory = (Get-Location).Path
 Write-Output "Current directory $rootDirectory"
 
@@ -10,10 +22,8 @@ if ($install_NIPM)
     $webClient = New-Object System.Net.WebClient
     $webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
     Write-Output "...done"
-    if (![System.IO.File]::Exists($nipmInstaller))
-    {
-        throw "Could not find downloaded NIPM installer"
-    }
+    Assert-FileExists($nipmInstaller)
+    
     Write-Output "Installing NIPM..."
     Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
     Write-Output "...done"
@@ -21,13 +31,16 @@ if ($install_NIPM)
 }
 
 $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
-if (![System.IO.File]::Exists($nipm))
+Assert-FileExists($nipm)
+
+$install_nxg = $false
+if ($install_nxg)
 {
-    throw "Could not find installed NIPM at $nipm"
-}
-else 
-{
-    Write-Output "Found NIPM at $nipm"
+    Write-Output "Installing LabVIEW NXG..."
+    Start-Process -FilePath $nipm -ArgumentList "install ni-labview-nxg-2.0.0 ni-certificates --progress-only --accept-eulas --prevent-reboot" -Wait
+    Write-Output "...done"
+    $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
+    Assert-FileExists($nxg)
 }
 
 return
