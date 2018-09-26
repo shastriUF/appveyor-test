@@ -16,4 +16,14 @@ Write-Output "NIPM Installed (maybe)"
 
 Remove-Item $nipmInstaller
 
+$nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
+if (![System.IO.File]::Exists($nipm))
+{
+    throw "Could not find installed NIPM app"
+}
+else 
+{
+    Write-Output "Found NIPM"
+}
+
 return
