@@ -3,7 +3,7 @@ environment:
     - PYTHON: "C:\\Python37-x64"
 
 build_script:
-    - ps: "build.ps1"
+    - ps: ".\\build.ps1"
 
 test_script:
   - "%PYTHON%\\python.exe test-CapitalizeFile.py"
