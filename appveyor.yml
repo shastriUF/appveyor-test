@@ -3,7 +3,7 @@ environment:
     - PYTHON: "C:\\Python37-x64"
 
 install:
-    - ps: ".\\build.ps1"
+    - ps: ".\\install.ps1"
 
 build: off
 

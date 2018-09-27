@@ -16,7 +16,6 @@ Write-Output "Current directory $rootDirectory"
 $install_NIPM = $true
 if ($install_NIPM)
 {
-    # $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.0.2.exe'
     $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.5.exe'
     $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
     Write-Output "Downloading NIPM from $nipmDownloadPath..."
