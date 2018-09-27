@@ -25,44 +25,49 @@ function Assert-FileDoesNotExist {
 $rootDirectory = (Get-Location).Path
 Write-Output "Current directory $rootDirectory"
 
+
+# $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
+$nipm = 'C:\Program Files\National Instruments\NI Package Manager\nipkg.exe'
 $install_NIPM = $true
 if ($install_NIPM)
 {
     $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.5.exe'
     $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
-    Assert-FileDoesNotExist($nipmInstaller)
+    Assert-FileDoesNotExist($nipm)
     Write-Output "Downloading NIPM from $nipmDownloadPath..."
     $webClient = New-Object System.Net.WebClient
     $webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
-    Write-Output "...done"
+    $time = (Get-Date).ToUniversalTime()
+    Write-Output "...done at UTC $time"
     Assert-FileExists($nipmInstaller)
     
     Assert-FileDoesNotExist($nipm)
     Write-Output "Installing NIPM..."
     Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
-    Write-Output "...done"
+    $time = (Get-Date).ToUniversalTime()
+    Write-Output "...done at UTC $time"
     Remove-Item $nipmInstaller
 }
 
-# $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
-$nipm = 'C:\Program Files\National Instruments\NI Package Manager\nipkg.exe'
 Assert-FileExists($nipm)
 
 $install_nxg = $true
 if ($install_nxg)
 {
+    $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
     Assert-FileDoesNotExist($nxg)
-    Write-Output "Installing LabVIEW NXG..."
     # Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 --temp-feeds="http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released,http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released" --progress-only --accept-eulas --prevent-reboot'
     Start-Process -FilePath $nipm -ArgumentList 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released' -Wait
     Start-Process -FilePath $nipm -ArgumentList 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released' -Wait
     Start-Process -FilePath $nipm -ArgumentList 'update' -Wait
+    Write-Output "Installing NI Certificates..."
     Start-Process -FilePath $nipm -ArgumentList 'install ni-certificates --accept-eulas --assume-yes --verbose' -Wait
-    Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 ni-certificates --accept-eulas --assume-yes --verbose'
-    $id = (Get-Process 'nipkg').Id
-    Wait-Process -Id $id
-    Write-Output "...done"
-    $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
+    $time = (Get-Date).ToUniversalTime()
+    Write-Output "...done at UTC $time"
+    Write-Output "Installing LabVIEW NXG..."
+    Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 --accept-eulas --assume-yes --verbose' -Wait
+    $time = (Get-Date).ToUniversalTime()
+    Write-Output "...done at UTC $time"
     Assert-FileExists($nxg)
 }
 
