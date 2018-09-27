@@ -30,15 +30,21 @@ if ($install_NIPM)
     Remove-Item $nipmInstaller
 }
 
-$nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
+# $nipm = 'C:\Program Files\National Instruments\NI Package Manager\NIPackageManager.exe'
+$nipm = 'C:\Program Files\National Instruments\NI Package Manager\nipkg.exe'
 Assert-FileExists($nipm)
 
 $install_nxg = $true
 if ($install_nxg)
 {
     Write-Output "Installing LabVIEW NXG..."
-    Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 --temp-feeds="http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released,http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released" --progress-only --accept-eulas --prevent-reboot'
-    $id = (Get-Process 'NIPackageManager').Id
+    # Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 --temp-feeds="http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released,http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released" --progress-only --accept-eulas --prevent-reboot'
+    Start-Process -FilePath $nipm -ArgumentList 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released' -Wait
+    Start-Process -FilePath $nipm -ArgumentList 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released' -Wait
+    Start-Process -FilePath $nipm -ArgumentList 'update' -Wait
+    Start-Process -FilePath $nipm -ArgumentList 'install ni-certificates --accept-eulas --assume-yes --verbose' -Wait
+    Start-Process -FilePath $nipm -ArgumentList 'install ni-labview-nxg-2.0.0 ni-certificates --accept-eulas --assume-yes --verbose'
+    $id = (Get-Process 'nipkg').Id
     Wait-Process -Id $id
     Write-Output "...done"
     $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
