@@ -1,5 +1,6 @@
 import sys
 
+
 def writeToFileInAllCaps(fileNameToRead, fileNameToWrite):
     with open(fileNameToRead, 'r') as fileToRead:
         with open(fileNameToWrite, 'w') as fileToWrite:
