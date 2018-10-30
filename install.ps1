@@ -1,25 +1,25 @@
 function Assert-FileExists {
-    Param ([string]$path)
-    if (![System.IO.File]::Exists($path))
-    {
-        throw "Could not find file at $path"
-    }
-    else 
-    {
-        Write-Output "Found file at $path"
-    }
+	Param ([string]$path)
+	if (![System.IO.File]::Exists($path))
+	{
+		throw "Could not find file at $path"
+	}
+	else 
+	{
+		Write-Output "Found file at $path"
+	}
 }
 
 function Assert-FileDoesNotExist {
-    Param ([string]$path)
-    if ([System.IO.File]::Exists($path))
-    {
-        throw "Found unexpected file at $path."
-    }
-    else 
-    {
-        Write-Output "$path not installed."
-    }
+	Param ([string]$path)
+	if ([System.IO.File]::Exists($path))
+	{
+		throw "Found unexpected file at $path."
+	}
+	else 
+	{
+		Write-Output "$path not installed."
+	}
 }
 
 function Run {
@@ -37,10 +37,10 @@ function Run {
 	$out = New-Object System.Collections.ArrayList
 	$handler = 
 	{
-        if (! [String]::IsNullOrEmpty($EventArgs.Data)) 
+		if (! [String]::IsNullOrEmpty($EventArgs.Data)) 
 		{
-            $Event.MessageData.Add($EventArgs.Data)
-        }
+			$Event.MessageData.Add($EventArgs.Data)
+		}
     }
 	
 	$outEvent = Register-ObjectEvent -InputObject $p -Action $handler -EventName 'OutputDataReceived' -MessageData $out
@@ -73,23 +73,23 @@ $nipm = 'C:\Program Files\National Instruments\NI Package Manager\nipkg.exe'
 $install_NIPM = $true
 if ($install_NIPM)
 {
-    $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.5.1.exe'
-    $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
-    Assert-FileDoesNotExist($nipm)
-    $time = (Get-Date).ToUniversalTime()
+	$nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.5.1.exe'
+	$nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
+	Assert-FileDoesNotExist($nipm)
+	$time = (Get-Date).ToUniversalTime()
 	Write-Output "Downloading NIPM from $nipmDownloadPath... UTC $time"
-    $webClient = New-Object System.Net.WebClient
-    $webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
-    $time = (Get-Date).ToUniversalTime()
-    Write-Output "...done at UTC $time"
-    Assert-FileExists($nipmInstaller)
+	$webClient = New-Object System.Net.WebClient
+	$webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
+	$time = (Get-Date).ToUniversalTime()
+	Write-Output "...done at UTC $time"
+	Assert-FileExists($nipmInstaller)
     
-    Assert-FileDoesNotExist($nipm)
-    Write-Output "Installing NIPM..."
-    Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
-    $time = (Get-Date).ToUniversalTime()
-    Write-Output "...done at UTC $time"
-    Remove-Item $nipmInstaller
+	Assert-FileDoesNotExist($nipm)
+	Write-Output "Installing NIPM..."
+	Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
+	$time = (Get-Date).ToUniversalTime()
+	Write-Output "...done at UTC $time"
+	Remove-Item $nipmInstaller
 }
 
 Assert-FileExists($nipm)
@@ -97,30 +97,30 @@ Assert-FileExists($nipm)
 $install_nxg = $true
 if ($install_nxg)
 {
-    $nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
-    Assert-FileDoesNotExist($nxg)
+	$nxg = 'C:\Program Files\National Instruments\LabVIEW NXG 2.0\LabVIEW NXG.exe'
+	Assert-FileDoesNotExist($nxg)
 	
 	Write-Output "Adding LabVIEW NXG feeds to NI Package Manager"
-    Run $nipm 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released'
+	Run $nipm 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0/2.1/released'
 	Run $nipm 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-rte/2.1/released'
-    Run $nipm 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-web-module/2.1/released'
-    Run $nipm 'update'
+	Run $nipm 'feed-add http://download.ni.com/support/nipkg/products/ni-labview-nxg-2.0.0-web-module/2.1/released'
+	Run $nipm 'update'
 	
 	Write-Output "Installing NI Certificates..."
 	Run $nipm 'install ni-certificates --accept-eulas --assume-yes --verbose'
 	$time = (Get-Date).ToUniversalTime()
-    Write-Output "...done at UTC $time"
+	Write-Output "...done at UTC $time"
     
 	Write-Output "Installing LabVIEW NXG..."
 	Run $nipm 'install ni-labview-nxg-2.0.0 --accept-eulas --assume-yes --verbose'
-    $time = (Get-Date).ToUniversalTime()
-    Write-Output "...done at UTC $time"
+	$time = (Get-Date).ToUniversalTime()
+	Write-Output "...done at UTC $time"
     
 	Write-Output "Installing LabVIEW NXG Web Module..."
-    Run $nipm 'install ni-labview-nxg-2.0.0-web-module --accept-eulas --assume-yes --verbose'
-    $time = (Get-Date).ToUniversalTime()
-    Write-Output "...done at UTC $time"
-    Assert-FileExists($nxg)
+	Run $nipm 'install ni-labview-nxg-2.0.0-web-module --accept-eulas --assume-yes --verbose'
+	$time = (Get-Date).ToUniversalTime()
+	Write-Output "...done at UTC $time"
+	Assert-FileExists($nxg)
 }
 
 return
