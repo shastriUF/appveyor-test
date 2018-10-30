@@ -38,40 +38,20 @@ if ($install_NIPM)
 {
     $nipmDownloadPath = 'http://download.ni.com/support/softlib/AST/NIPM/NIPackageManager18.5.1.exe'
     $nipmInstaller = Join-Path -Path $rootDirectory -ChildPath 'install-nipm.exe'
-    # Assert-FileDoesNotExist($nipm)
-    # Write-Output "Downloading NIPM from $nipmDownloadPath..."
-    # $webClient = New-Object System.Net.WebClient
-    # $webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
-    # $time = (Get-Date).ToUniversalTime()
-    # Write-Output "...done at UTC $time"
+    Assert-FileDoesNotExist($nipm)
+    Write-Output "Downloading NIPM from $nipmDownloadPath..."
+    $webClient = New-Object System.Net.WebClient
+    $webClient.DownloadFile($nipmDownloadPath, $nipmInstaller)
+    $time = (Get-Date).ToUniversalTime()
+    Write-Output "...done at UTC $time"
     Assert-FileExists($nipmInstaller)
     
     Assert-FileDoesNotExist($nipm)
     Write-Output "Installing NIPM..."
-    # Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
-    $pinfo = New-Object System.Diagnostics.ProcessStartInfo
-	$pinfo.FileName = $nipmInstaller
-	$pinfo.RedirectStandardError = $true
-	$pinfo.RedirectStandardOutput = $true
-	$pinfo.UseShellExecute = $false
-	$pinfo.Arguments = "/Q"
-	$p = New-Object System.Diagnostics.Process
-	$p.StartInfo = $pinfo
-	$p.Start()# | Out-Null
-	while (!$p.HasExited)
-	{
-		$stdout = $p.StandardOutput.ReadToEnd()
-		$stderr = $p.StandardError.ReadToEnd()
-		Write-Output "stdout: $stdout"
-		Write-Output "stderr: $stderr"
-		
-		Thread.Sleep(1000)
-		$p.Refresh()
-	}
-	
-	$time = (Get-Date).ToUniversalTime()
+    Start-Process -FilePath $nipmInstaller -ArgumentList "/Q" -Wait
+    $time = (Get-Date).ToUniversalTime()
     Write-Output "...done at UTC $time"
-    # Remove-Item $nipmInstaller
+    Remove-Item $nipmInstaller
 }
 
 Assert-FileExists($nipm)
